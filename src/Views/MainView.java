@@ -8,7 +8,12 @@ package Views;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -75,13 +80,13 @@ public class MainView extends javax.swing.JFrame implements Observer {
         resetFieldsB = new javax.swing.JButton();
         runB = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        problemSelectionCB = new javax.swing.JComboBox<>();
+        openFileChooser = new javax.swing.JButton("Select");
         chartP = new Plot2DPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         precisionTF = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        resultsTA = new javax.swing.JTextArea();
+        decipheredTA = new javax.swing.JTextArea();
         
         //DEFAULTS VALUES
         populationSizeTF.setText("100");
@@ -93,6 +98,52 @@ public class MainView extends javax.swing.JFrame implements Observer {
 
         // define the legend position
         chartP.addLegend("SOUTH");
+        
+        openFileChooser.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.showOpenDialog(openFileChooser);
+				File file = fileChooser.getSelectedFile();
+				fileContent = "";
+				
+				BufferedReader br = null;
+				FileReader fr = null;
+
+				try {
+
+					fr = new FileReader(file.getPath());
+					br = new BufferedReader(fr);
+
+					String sCurrentLine;
+
+					while ((sCurrentLine = br.readLine()) != null) {
+						fileContent += sCurrentLine + " ";
+					}
+					
+					fileContent = fileContent.replaceAll("\\.", "");
+					fileContent = fileContent.replaceAll("\\,", "");
+					fileContent = fileContent.replaceAll("\\'", "");					
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				} finally {
+
+					try {
+
+						if (br != null)
+							br.close();
+
+						if (fr != null)
+							fr.close();
+
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+
+				}
+			}
+		});
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1200, 610));
@@ -230,48 +281,12 @@ public class MainView extends javax.swing.JFrame implements Observer {
 						mutationTF.getText().equals("") || eliteTF.getText().equals("") || precisionTF.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "You must introduce all the paramaters", "Error", JOptionPane.ERROR_MESSAGE);
 				} else {
-					if(problemSelectionCB.getSelectedItem().toString().equals("5") && (nTF.getText().equals("") ||
-							Integer.parseInt(nTF.getText()) > 7 || Integer.parseInt(nTF.getText()) < 0)) {
-						JOptionPane.showMessageDialog(null, "You must introduce N (0 - 7) parameter", "Error", JOptionPane.ERROR_MESSAGE);
-					} else {
-						try {
-							controller.run(Integer.parseInt(populationSizeTF.getText()), 
-											Integer.parseInt(generationNumberTF.getText()), 
-											selectionModeCB.getSelectedItem().toString(), 
-											Double.parseDouble(crossoverTF.getText()), 
-											Double.parseDouble(mutationTF.getText()), 
-											problemSelectionCB.getSelectedItem().toString(), 
-											Double.parseDouble(eliteTF.getText()),
-											Double.parseDouble(precisionTF.getText()),
-											problemSelectionCB.getSelectedItem().toString().equals("5") ?
-													Integer.parseInt(nTF.getText().toString()) : 0,
-											selectionModeCB.getSelectedItem().toString().equals("Truncation") ?
-													Double.parseDouble(truncTF.getText().toString()) : 0.0,
-											mutationModeCB.getSelectedItem().toString());
-							} catch(NumberFormatException e1) {
-								JOptionPane.showMessageDialog(null, "Munber format exception", "Error", JOptionPane.ERROR_MESSAGE);
-							}
-					}
+					
 				}
 			}
 		});
 
-        jLabel9.setText("Problem:");
-
-        problemSelectionCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5" }));
-        problemSelectionCB.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(problemSelectionCB.getSelectedItem().toString().equals("5")) {
-					jLabel11.setVisible(true);
-					nTF.setVisible(true);
-				} else {
-					jLabel11.setVisible(false);
-					nTF.setVisible(false);
-				}
-			}
-		});
+        jLabel9.setText("File:");
         
         selectionModeCB.addActionListener(new ActionListener() {
 			
@@ -322,11 +337,11 @@ public class MainView extends javax.swing.JFrame implements Observer {
                 .addComponent(precisionTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        resultsTA.setEditable(false);
-        resultsTA.setColumns(20);
-        resultsTA.setRows(5);
-        resultsTA.setBorder(javax.swing.BorderFactory.createTitledBorder("Results"));
-        jScrollPane1.setViewportView(resultsTA);
+        decipheredTA.setEditable(false);
+        decipheredTA.setColumns(20);
+        decipheredTA.setRows(5);
+        decipheredTA.setBorder(javax.swing.BorderFactory.createTitledBorder("Deciphered text"));
+        jScrollPane1.setViewportView(decipheredTA);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -353,12 +368,12 @@ public class MainView extends javax.swing.JFrame implements Observer {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(generationNumberTF)
-                            .addComponent(problemSelectionCB)
+                            .addComponent(openFileChooser)
                             .addComponent(populationSizeTF)
                             .addComponent(selectionModeCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(nTF)
                             .addComponent(truncTF)
-                            .addComponent(problemSelectionCB, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(openFileChooser, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(22, 22, 22)
@@ -375,7 +390,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9)
-                            .addComponent(problemSelectionCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(openFileChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(populationSizeTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -455,7 +470,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
     private javax.swing.JComboBox<String> selectionModeCB;
     private javax.swing.JComboBox<String> crossoverModeCB;
     private javax.swing.JComboBox<String> mutationModeCB;
-    private javax.swing.JComboBox<String> problemSelectionCB;
+    private javax.swing.JButton openFileChooser;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -474,7 +489,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
     private Plot2DPanel chartP;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea resultsTA;
+    private javax.swing.JTextArea decipheredTA;
     private javax.swing.JTextField populationSizeTF;
     private javax.swing.JTextField generationNumberTF;
     private javax.swing.JTextField nTF;
@@ -483,6 +498,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
     private javax.swing.JTextField mutationTF;
     private javax.swing.JTextField eliteTF;
     private javax.swing.JTextField precisionTF;
+    private String fileContent;
     // End of variables declaration//GEN-END:variables
 	
     @Override
@@ -495,7 +511,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
     		
     		SwingUtilities.invokeLater(new Runnable() {
     		    public void run() {
-    		    		resultsTA.append("The best result is: " + String.valueOf(best[best.length - 1]) + " in " + bestChromosome.getPoint() + "\n");
+    		    		decipheredTA.append("The best result is: " + String.valueOf(best[best.length - 1]) + " in " + bestChromosome.getPoint() + "\n");
     	    			chartP.removeAllPlots();
     		    		chartP.addLinePlot("Absolute best", x, best);
     		        chartP.addLinePlot("Generation best", x, bestGeneration);

@@ -72,4 +72,6 @@ public class MainControler {
 		_ga.setMutation(mutation);
 		_ga.run();
 	}
+	
+	
 }
