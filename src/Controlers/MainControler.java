@@ -5,6 +5,7 @@ import Crossover.CrossoverAlgorithm;
 
 import Models.Chromosome;
 import Models.GeneticAlgorithm;
+import Models.LetterFrequency;
 import Models.Population;
 
 import Selection.SelectionAlgorithm;
@@ -56,10 +57,10 @@ public class MainControler {
 	 * @param truncation percentage of truncation selection.
 	 */
 	public void run(int populationSize, int generationNumber, 
-					String selection, double cross, double mutation, 
-					String function, double elitism, double precision, int n, double truncation, String crossOver) {
+					String selection, double cross, double mutation,
+					double elitism, double precision, double truncation, String crossOver, String fileContent) {
 		
-		Population population = null;
+		/*Population population = null;
 		SelectionAlgorithm selectionAlgorithm = SelectionFactory.getSelectionAlgorithm(selection, truncation);
 		CrossoverAlgorithm crossoverAlgorithm = CrossOverFactory.getCrossoverAlgorithm(crossOver);
 		
@@ -70,8 +71,34 @@ public class MainControler {
 		_ga.setCrossOverAlgorithm(crossoverAlgorithm);
 		_ga.setCross(cross);
 		_ga.setMutation(mutation);
-		_ga.run();
+		_ga.run();*/
+		LetterFrequency frequencies = calculateFrequencies(fileContent);
 	}
 	
-	
+	public LetterFrequency calculateFrequencies(String fileContent) {
+		String []words = fileContent.split(" ");
+		LetterFrequency frequencies = new LetterFrequency();
+		
+		for(String word: words) {
+			for(int i = 0; i < word.length(); i++)
+				frequencies.incrementFrequency(String.valueOf(word.charAt(i)).toUpperCase(), "MONO");
+		}
+		
+		for(String word: words) {
+			for(int i = 0; i < word.length() - 1; i++)
+				frequencies.incrementFrequency(word.substring(i, i + 2).toUpperCase(), "BI");
+		}
+		
+		for(String word: words) {
+			for(int i = 0; i < word.length() - 2; i++)
+				frequencies.incrementFrequency(word.substring(i, i + 3).toUpperCase(), "TRI");
+		}
+		
+		for(String word: words) {
+			for(int i = 0; i < word.length() - 3; i++)
+				frequencies.incrementFrequency(word.substring(i, i + 4).toUpperCase(), "TETRA");
+		}
+		
+		return frequencies;
+	}
 }

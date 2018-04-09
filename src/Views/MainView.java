@@ -281,7 +281,20 @@ public class MainView extends javax.swing.JFrame implements Observer {
 						mutationTF.getText().equals("") || eliteTF.getText().equals("") || precisionTF.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "You must introduce all the paramaters", "Error", JOptionPane.ERROR_MESSAGE);
 				} else {
-					
+					try {
+						controller.run(Integer.parseInt(populationSizeTF.getText()), 
+										Integer.parseInt(generationNumberTF.getText()), 
+										selectionModeCB.getSelectedItem().toString(), 
+										Double.parseDouble(crossoverTF.getText()), 
+										Double.parseDouble(mutationTF.getText()), 
+										Double.parseDouble(eliteTF.getText()),
+										Double.parseDouble(precisionTF.getText()),
+										selectionModeCB.getSelectedItem().toString().equals("Truncation") ?
+												Double.parseDouble(truncTF.getText().toString()) : 0.0,
+										mutationModeCB.getSelectedItem().toString(), fileContent);
+						} catch(NumberFormatException e1) {
+							JOptionPane.showMessageDialog(null, "Munber format exception", "Error", JOptionPane.ERROR_MESSAGE);
+						}
 				}
 			}
 		});

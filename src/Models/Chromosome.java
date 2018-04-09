@@ -1,58 +1,73 @@
 package Models;
 
+import java.util.Random;
+
+import Mutation.MutationAlgorithm;
+
 /**
  * Abstract class which represents a chromosome.
  * 
  * @author Group 06.
  *
  */
-public abstract class Chromosome {
+public class Chromosome {
 	
 	/**
 	 * Boolean matrix, in each position it has an array with alleles.
 	 */
-	protected boolean[][] _gens;
+	private char[] _gens;
 	
 	/**
 	 *  Integer array with the length of each alleles array.
 	 */
-	protected int[] _length;
+	private static final int _length = 26;
 	
 	/**
 	 * Chromosome aptitude.
 	 */
-	protected double _aptitude;
+	private double _aptitude;
 	
 	/**
 	 * Chromosome score.
 	 */
-	protected double _score;
+	private double _score;
 	
 	/**
 	 * Chromosome aggregate score.
 	 */
-	protected double _aggregateSocore;
+	private double _aggregateSocore;
+	
+	/**
+	 * 
+	 */
+	private MutationAlgorithm _mutation;
+	
+	/**
+	 * 
+	 */
+	private LetterFrequency _frequencies;
+	
+	private String _fileContent;
+	
+	public Chromosome(MutationAlgorithm mutation, String fileContent) {
+		_mutation = mutation;
+		_frequencies = new LetterFrequency();
+		_fileContent = fileContent;
+	}
 	
 	/**
 	 * Initialize chromosome with random values.
 	 */
 	public void init() {
-		for (int j = 0; j < _length.length; j++){
-			for(int i = 0; i < _length[j]; i ++) {
-				_gens[j][i] = Math.random() < 0.5 ? false : true;
-			}
+		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		Random r = new Random();
+		
+		for (int i = 0; i < _length; i++) {
+			int index = r.nextInt(alphabet.length());
+			
+			_gens[i] = alphabet.charAt(index);
+			alphabet.replace(String.valueOf(alphabet.charAt(index)), "");
 		}
-	}
-	
-	/**
-	 * Calculate the chromosome length.
-	 * 
-	 * @param minX minimum x value.
-	 * @param maxX maximum x value.
-	 * @return chromosome length.
-	 */
-	public int calculateLength(double minX, double maxX, double precision) {
-		return Utils.log(1 + ((maxX - minX) / precision), 2);
 	}
 
 	/**
@@ -61,35 +76,39 @@ public abstract class Chromosome {
 	 * @param mutation mutation %.
 	 */
 	public void mutation(double mutation) {
-		boolean mutated = false;
-		
-		for(int j = 0; j < _length.length; j++){
-			for(int i = 0; i < _length[j]; i++) {
-				if(Math.random() < mutation) {
-					mutated = true;
-					_gens[j][i] = !_gens[j][i];
-				}
-			}
-		
-		if(mutated)
-			setAptitude(test());
-		}
+		if(Math.random() < mutation)
+			_mutation.mutation(this);
 	}
 	
-	
-	//ABSTRACT FUNCTIONS//
-	
+		
 	/**
 	 * 
 	 */
-	abstract public boolean[][] cloneGens();
+	public char[] cloneGens() {
+		char []ret = new char[_length];
+		
+		for(int i = 0; i < _length; i++)
+			ret[i] = _gens[i];
+		
+		return ret;
+	}
 	
 	/**
 	 * Test the chromosome to calculate the aptitude.
 	 * 
 	 * @return chromosome aptitude.
 	 */
-	abstract public double test();
+	public double test() {
+		
+	}
+	
+	public void exchange() {
+		String ret = "";
+		
+		for(int i = 0; i < _gens.length; i++) {
+			_frequencies.incrementFrequency(_gens[i], "MONO");
+		}		
+	}
 	
 	/**
 	 * Calculate the phenotype.
@@ -97,36 +116,27 @@ public abstract class Chromosome {
 	 * @param index allele number.
 	 * @return chromosome phenotype.
 	 */
-	abstract public double getPhenotype(int index);
-	
-	/**
-	 * Create new child of each chromosome type.
-	 * 
-	 * @return new chromosome.
-	 */
-	abstract public Chromosome getChild();
+	public double getPhenotype(int index) {
+		
+	}
 
 	/**
 	 * Clone the chromosome.
 	 */
-	abstract public Chromosome clone();
-	
-	/** 
-	 * @return string with the phenotype point.
-	 */
-	abstract public String getPoint();
-
+	public Chromosome clone() {
+		
+	}
 	
 	//GETTERS//
-	public boolean[][] getGens() {
+	public char[] getGens() {
 		return _gens;
 	}
 	
-	public int getLength(int i) {
-		return _length[i];
+	public char getGen(int i) {
+		return _gens[i];
 	}
 	
-	public int[] getLength() {
+	public int getLength() {
 		return _length;
 	}
 	
@@ -143,16 +153,12 @@ public abstract class Chromosome {
 	}
 	
 	//SETTERS//
-	public void setGen(int gen, int i, boolean b) {
-		_gens[gen][i] = b;
+	public void setGen(int i, char b) {
+		_gens[i] = b;
 	}
 
-	public void setGens(boolean[][] gens) {
+	public void setGens(char[] gens) {
 		_gens = gens;
-	}
-
-	public void setLength(int[] length) {
-		_length = length;
 	}
 
 	public void setAptitude(double aptitude) {

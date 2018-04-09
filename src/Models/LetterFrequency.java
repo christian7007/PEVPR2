@@ -201,4 +201,44 @@ public class LetterFrequency {
 	public double getFrequency(String nGram) {
 		return frequencies.get(nGram);
 	}
+	
+	public void incrementFrequency(String nGram, String type) {
+		if(type.equals("MONO")) {
+			if(monoGram.containsKey(nGram))
+				monoGram.put(nGram, monoGram.get(nGram) + 1);
+		} else if(type.equals("BI")) {
+			if(biGram.containsKey(nGram))
+				biGram.put(nGram, biGram.get(nGram) + 1);
+		} else if(type.equals("TRI")) {
+			if(triGram.containsKey(nGram))
+				triGram.put(nGram, triGram.get(nGram) + 1);
+		} else {
+			if(tetraGram.containsKey(nGram))
+				tetraGram.put(nGram, tetraGram.get(nGram) + 1);
+		}
+	}
+	
+	public void calculateFrequencies(String fileContent) {
+		String []words = fileContent.split(" ");
+		
+		for(String word: words) {
+			for(int i = 0; i < word.length(); i++)
+				incrementFrequency(String.valueOf(word.charAt(i)).toUpperCase(), "MONO");
+		}
+		
+		for(String word: words) {
+			for(int i = 0; i < word.length() - 1; i++)
+				incrementFrequency(word.substring(i, i + 2).toUpperCase(), "BI");
+		}
+		
+		for(String word: words) {
+			for(int i = 0; i < word.length() - 2; i++)
+				incrementFrequency(word.substring(i, i + 3).toUpperCase(), "TRI");
+		}
+		
+		for(String word: words) {
+			for(int i = 0; i < word.length() - 3; i++)
+				incrementFrequency(word.substring(i, i + 4).toUpperCase(), "TETRA");
+		}		
+	}
 }
