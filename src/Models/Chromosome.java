@@ -106,7 +106,7 @@ public class Chromosome {
 		String ret = "";
 		
 		for(int i = 0; i < _gens.length; i++) {
-			_frequencies.incrementFrequency(_gens[i], "MONO");
+			_frequencies.incrementFrequency(alph[i]_gens[i]);
 		}		
 	}
 	
