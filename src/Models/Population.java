@@ -76,6 +76,7 @@ public class Population {
 		_mean = new double[generations];
 		_generation = 0;
 		_bestChromosome = population[0].clone();
+		_bestChromosome.setAptitude(Double.MAX_VALUE);
 		_type = type;
 	}
 	

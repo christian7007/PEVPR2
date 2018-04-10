@@ -124,7 +124,12 @@ public class MainView extends javax.swing.JFrame implements Observer {
 					
 					fileContent = fileContent.replaceAll("\\.", "");
 					fileContent = fileContent.replaceAll("\\,", "");
-					fileContent = fileContent.replaceAll("\\'", "");					
+					fileContent = fileContent.replaceAll("\\'", "");			
+					fileContent = fileContent.replaceAll("\\\"", "");
+					fileContent = fileContent.replaceAll("\\(", "");
+					fileContent = fileContent.replaceAll("\\)", "");
+					fileContent = fileContent.replaceAll("\\;", "");
+					fileContent = fileContent.replaceAll("\\-", "");
 				} catch (IOException ex) {
 					ex.printStackTrace();
 				} finally {
@@ -291,7 +296,8 @@ public class MainView extends javax.swing.JFrame implements Observer {
 										Double.parseDouble(precisionTF.getText()),
 										selectionModeCB.getSelectedItem().toString().equals("Truncation") ?
 												Double.parseDouble(truncTF.getText().toString()) : 0.0,
-										mutationModeCB.getSelectedItem().toString(), fileContent);
+										crossoverModeCB.getSelectedItem().toString(),
+										mutationModeCB.getSelectedItem().toString(), fileContent.toUpperCase());
 						} catch(NumberFormatException e1) {
 							JOptionPane.showMessageDialog(null, "Munber format exception", "Error", JOptionPane.ERROR_MESSAGE);
 						}
@@ -515,7 +521,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
     // End of variables declaration//GEN-END:variables
 	
     @Override
-	public void updatePlot(double[] mean, double[] bestGeneration, double[] best, int generations, Chromosome bestChromosome) {
+	public void updatePlot(double[] mean, double[] bestGeneration, double[] best, int generations, Chromosome result) {
         		
     		double[] x = new double[generations];
     		
@@ -524,7 +530,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
     		
     		SwingUtilities.invokeLater(new Runnable() {
     		    public void run() {
-    		    		decipheredTA.append("The best result is: " + String.valueOf(best[best.length - 1]) + " in " + bestChromosome.getPoint() + "\n");
+    		    		decipheredTA.setText(result.getPhenotype());
     	    			chartP.removeAllPlots();
     		    		chartP.addLinePlot("Absolute best", x, best);
     		        chartP.addLinePlot("Generation best", x, bestGeneration);

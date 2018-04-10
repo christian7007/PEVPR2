@@ -2,12 +2,12 @@ package Controlers;
 
 import Crossover.CrossOverFactory;
 import Crossover.CrossoverAlgorithm;
-
 import Models.Chromosome;
 import Models.GeneticAlgorithm;
 import Models.LetterFrequency;
 import Models.Population;
-
+import Mutation.MutationAlgorithm;
+import Mutation.MutationFactory;
 import Selection.SelectionAlgorithm;
 import Selection.SelectionFactory;
 
@@ -58,9 +58,15 @@ public class MainControler {
 	 */
 	public void run(int populationSize, int generationNumber, 
 					String selection, double cross, double mutation,
-					double elitism, double precision, double truncation, String crossOver, String fileContent) {
+					double elitism, double precision, double truncation, String crossOver, String mutationMode, String fileContent) {
 		
-		/*Population population = null;
+		MutationAlgorithm mutationAlgorithm = MutationFactory.getCrossoverAlgorithm("Inserction"); 
+		Chromosome []chromosomes = new Chromosome[populationSize];
+		
+		for(int i = 0; i < populationSize; i++)
+			chromosomes[i] = new Chromosome(mutationAlgorithm, fileContent);
+		
+		Population population = new Population(populationSize, generationNumber, elitism, chromosomes, "min");
 		SelectionAlgorithm selectionAlgorithm = SelectionFactory.getSelectionAlgorithm(selection, truncation);
 		CrossoverAlgorithm crossoverAlgorithm = CrossOverFactory.getCrossoverAlgorithm(crossOver);
 		
@@ -71,6 +77,6 @@ public class MainControler {
 		_ga.setCrossOverAlgorithm(crossoverAlgorithm);
 		_ga.setCross(cross);
 		_ga.setMutation(mutation);
-		_ga.run();*/
+		_ga.run();
 	}
 }

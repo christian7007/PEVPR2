@@ -241,4 +241,42 @@ public class LetterFrequency {
 				incrementFrequency(word.substring(i, i + 4).toUpperCase(), "TETRA");
 		}		
 	}
+	
+	public void resetFrequencies() {
+		for(String key: monoGram.keySet()) {
+			monoGram.put(key, 0);
+		}
+		
+		for(String key: biGram.keySet()) {
+			biGram.put(key, 0);
+		}
+		
+		for(String key: triGram.keySet()) {
+			triGram.put(key, 0);
+		}
+		
+		for(String key: tetraGram.keySet()) {
+			tetraGram.put(key, 0);
+		}
+	}
+
+	public HashMap<String, Double> getFrequencies() {
+		return frequencies;
+	}
+
+	public HashMap<String, Integer> getMonoGram() {
+		return monoGram;
+	}
+
+	public HashMap<String, Integer> getBiGram() {
+		return biGram;
+	}
+
+	public HashMap<String, Integer> getTriGram() {
+		return triGram;
+	}
+
+	public HashMap<String, Integer> getTetraGram() {
+		return tetraGram;
+	}
 }

@@ -21,7 +21,7 @@ public class Point implements CrossoverAlgorithm {
 		
 		if(selectedNum % 2 == 1) selectedNum --;
 		
-		int crossPoint = new Random().nextInt((population.getSingle(0).getLength(0)) + 1);
+		int crossPoint = new Random().nextInt((population.getSingle(0).getLength()) + 1);
 		Chromosome child1, child2;
 		Chromosome parent1, parent2;
 		
@@ -50,17 +50,16 @@ public class Point implements CrossoverAlgorithm {
 		child1.init();
 		child2.init();
 		
-		for (int j = 0; j < parent1.getLength().length; j++){
-			for(int i = 0; i < crossPoint; i++) {
-				child1.setGen(j, i, parent1.getGens()[j][i]);
-				child2.setGen(j, i, parent2.getGens()[j][i]);
-			}
-			
-			for(int i = crossPoint; i < parent1.getLength()[j]; i++) {
-				child1.setGen(j, i, parent2.getGens()[j][i]);
-				child2.setGen(j, i, parent1.getGens()[j][i]);
-			}
+		for(int i = 0; i < crossPoint; i++) {
+			child1.setGen(i, parent1.getGens()[i]);
+			child2.setGen(i, parent2.getGens()[i]);
 		}
+		
+		for(int i = crossPoint; i < parent1.getLength(); i++) {
+			child1.setGen(i, parent2.getGens()[i]);
+			child2.setGen(i, parent1.getGens()[i]);
+		}
+		
 		child1.setAptitude(child1.test());
 		child2.setAptitude(child2.test());
 	}
