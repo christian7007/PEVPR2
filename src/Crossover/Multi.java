@@ -70,27 +70,4 @@ public class Multi implements CrossoverAlgorithm {
 			
 		}
 	}
-
-	private void cross(Chromosome parent1, Chromosome parent2, Chromosome child1, Chromosome child2, int crossPoint1, int crossPoint2) {
-		child1.init();
-		child2.init();
-		
-		for(int i = 0; i < crossPoint1; i++) {
-			child1.setGen(i, parent1.getGens()[i]);
-			child2.setGen(i, parent2.getGens()[i]);
-		}
-		
-		for(int i = crossPoint1; i < crossPoint2; i++) {
-			child1.setGen(i, parent2.getGens()[i]);
-			child2.setGen(i, parent1.getGens()[i]);
-		}
-		
-		for(int i = crossPoint2; i < parent1.getLength(); i++) {
-			child1.setGen(i, parent1.getGens()[i]);
-			child2.setGen(i, parent2.getGens()[i]);
-		}
-		
-		child1.setAptitude(child1.test());
-		child2.setAptitude(child2.test());
-	}
 }

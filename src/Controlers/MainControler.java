@@ -60,7 +60,7 @@ public class MainControler {
 					String selection, double cross, double mutation,
 					double elitism, double precision, double truncation, String crossOver, String mutationMode, String fileContent) {
 		
-		MutationAlgorithm mutationAlgorithm = MutationFactory.getCrossoverAlgorithm("Inserction"); 
+		MutationAlgorithm mutationAlgorithm = MutationFactory.getCrossoverAlgorithm("Exchange"); 
 		Chromosome []chromosomes = new Chromosome[populationSize];
 		
 		for(int i = 0; i < populationSize; i++)
@@ -68,7 +68,7 @@ public class MainControler {
 		
 		Population population = new Population(populationSize, generationNumber, elitism, chromosomes, "min");
 		SelectionAlgorithm selectionAlgorithm = SelectionFactory.getSelectionAlgorithm(selection, truncation);
-		CrossoverAlgorithm crossoverAlgorithm = CrossOverFactory.getCrossoverAlgorithm(crossOver);
+		CrossoverAlgorithm crossoverAlgorithm = CrossOverFactory.getCrossoverAlgorithm("Ordinal");
 		
 		population.init();
 		_ga.setGenerationNumber(generationNumber);

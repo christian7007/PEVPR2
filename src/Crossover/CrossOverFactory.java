@@ -9,6 +9,8 @@ public class CrossOverFactory {
 			return new Multi();
 		else if (algorithm.equals("Uniform crossover"))
 			return new Uniform();
+		else if (algorithm.equals("Ordinal"))
+			return new OrdinalCodification();
 		else
 			return new Point();
 	}

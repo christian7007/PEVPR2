@@ -130,6 +130,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
 					fileContent = fileContent.replaceAll("\\)", "");
 					fileContent = fileContent.replaceAll("\\;", "");
 					fileContent = fileContent.replaceAll("\\-", "");
+					fileContent = fileContent.replaceAll("\\?", "");
 				} catch (IOException ex) {
 					ex.printStackTrace();
 				} finally {

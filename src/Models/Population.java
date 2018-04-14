@@ -92,6 +92,10 @@ public class Population {
 		return _popultionSize;
 	}
 	
+	public Chromosome[] getPopulation(){
+		return this._population;
+	}
+	
 	public Chromosome getSingle(int pos) {
 		return _population[pos];
 	}
