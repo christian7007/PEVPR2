@@ -86,6 +86,12 @@ public class PBX implements CrossoverAlgorithm {
 				freePositions2.remove(0);
 			}
 		}
+		
+		parent1.setGens(child1);
+		parent2.setGens(child2);
+		
+		parent1.setAptitude(parent1.test());
+		parent2.setAptitude(parent2.test());
 	}
 
 }

@@ -2,7 +2,7 @@ package Mutation;
 
 public class MutationFactory {
 	
-	public static MutationAlgorithm getCrossoverAlgorithm(String algorithm) {
+	public static MutationAlgorithm getMutationAlgorithm(String algorithm) {
 		if (algorithm.equals("Inserction"))
 			return new Inserction();
 		if (algorithm.equals("Exchange"))

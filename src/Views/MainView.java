@@ -5,6 +5,7 @@
  */
 package Views;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,7 +51,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-    		this.setTitle("Practise 1");
+    		this.setTitle("Practise 2");
     		this.setPreferredSize(new Dimension(1200, 580));
     		this.setResizable(false);
     		
@@ -58,10 +59,13 @@ public class MainView extends javax.swing.JFrame implements Observer {
         populationSizeTF = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         generationNumberTF = new javax.swing.JTextField();
         nTF = new javax.swing.JTextField();
         truncTF = new javax.swing.JTextField();
+        kTF = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         selectionModeCB = new javax.swing.JComboBox<>();
         jPanel1 = new javax.swing.JPanel();
@@ -83,26 +87,28 @@ public class MainView extends javax.swing.JFrame implements Observer {
         openFileChooser = new javax.swing.JButton("Select");
         chartP = new Plot2DPanel();
         jPanel6 = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
-        precisionTF = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         decipheredTA = new javax.swing.JTextArea();
+        fileContent = "";
+        openFileChooser.setBackground(Color.red);
         
         //DEFAULTS VALUES
-        populationSizeTF.setText("100");
+        populationSizeTF.setText("50");
         generationNumberTF.setText("100");
-        crossoverTF.setText("0.6");
-        mutationTF.setText("0.05");
-        eliteTF.setText("0.1");
-        precisionTF.setText("0.001");
+        crossoverTF.setText("0.65");
+        mutationTF.setText("0.2");
+        eliteTF.setText("0.15");
 
         // define the legend position
         chartP.addLegend("SOUTH");
+        jLabel14.setText("Processing....");
+        jLabel14.setVisible(false);
         
         openFileChooser.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+		        openFileChooser.setBackground(Color.green);
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.showOpenDialog(openFileChooser);
 				File file = fileChooser.getSelectedFile();
@@ -163,19 +169,23 @@ public class MainView extends javax.swing.JFrame implements Observer {
         jLabel12.setText("Trunc: ");
         jLabel12.setVisible(false);
         truncTF.setVisible(false);
+        
+        jLabel13.setText("K: ");
+        jLabel13.setVisible(false);
+        kTF.setVisible(false);
 
         jLabel2.setText("Generation number:");
 
         jLabel3.setText("Selection:");
 
-        selectionModeCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Roulette", "Tournament", "Universal stochastic", "Truncation" }));
+        selectionModeCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Roulette", "Tournament", "Universal stochastic", "Truncation", "Rests" }));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Crossover"));
         jPanel1.setToolTipText("");
 
         jLabel4.setText("CrossoverB:");
 
-        crossoverModeCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Point crossover", "Multiple point crossover", "Uniform crossover" }));
+        crossoverModeCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ordinal", "PBX", "Point crossover", "Multiple point crossover", "Uniform crossover" }));
 
         jLabel5.setText("Crossover %:");
 
@@ -187,11 +197,13 @@ public class MainView extends javax.swing.JFrame implements Observer {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel5))
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel13))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(crossoverModeCB, 0, 120, Short.MAX_VALUE)
-                    .addComponent(crossoverTF))
+                    .addComponent(crossoverTF)
+                    .addComponent(kTF))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -205,6 +217,10 @@ public class MainView extends javax.swing.JFrame implements Observer {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(crossoverTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(kTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -215,7 +231,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
 
         jLabel7.setText("Mutation %:");
 
-        mutationModeCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Simple mutation" }));
+        mutationModeCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Inserction", "Exchange", "Inversion", "Heuristic" }));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -277,6 +293,18 @@ public class MainView extends javax.swing.JFrame implements Observer {
         );
 
         resetFieldsB.setText("Reset fields");
+        resetFieldsB.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//DEFAULTS VALUES
+		        populationSizeTF.setText("50");
+		        generationNumberTF.setText("100");
+		        crossoverTF.setText("0.65");
+		        mutationTF.setText("0.2");
+		        eliteTF.setText("0.15");				
+			}
+		});
         
         runB.setText("Run");
         runB.addActionListener(new ActionListener() {
@@ -284,22 +312,26 @@ public class MainView extends javax.swing.JFrame implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(populationSizeTF.getText().equals("") || generationNumberTF.getText().equals("") || crossoverTF.getText().equals("") ||
-						mutationTF.getText().equals("") || eliteTF.getText().equals("") || precisionTF.getText().equals("")) {
+						mutationTF.getText().equals("") || eliteTF.getText().equals("") || fileContent.equals("")) {
 					JOptionPane.showMessageDialog(null, "You must introduce all the paramaters", "Error", JOptionPane.ERROR_MESSAGE);
 				} else {
+			        jLabel14.setVisible(true);
 					try {
 						controller.run(Integer.parseInt(populationSizeTF.getText()), 
 										Integer.parseInt(generationNumberTF.getText()), 
-										selectionModeCB.getSelectedItem().toString(), 
-										Double.parseDouble(crossoverTF.getText()), 
-										Double.parseDouble(mutationTF.getText()), 
-										Double.parseDouble(eliteTF.getText()),
-										Double.parseDouble(precisionTF.getText()),
+										selectionModeCB.getSelectedItem().toString(),
 										selectionModeCB.getSelectedItem().toString().equals("Truncation") ?
 												Double.parseDouble(truncTF.getText().toString()) : 0.0,
 										crossoverModeCB.getSelectedItem().toString(),
-										mutationModeCB.getSelectedItem().toString(), fileContent.toUpperCase());
+										Double.parseDouble(crossoverTF.getText()), 
+										crossoverModeCB.getSelectedItem().toString().equals("PBX") ? 
+												Integer.parseInt(kTF.getText()) : 0,
+										mutationModeCB.getSelectedItem().toString(),
+										Double.parseDouble(mutationTF.getText()), 
+										Double.parseDouble(eliteTF.getText()),
+										fileContent.toUpperCase());
 						} catch(NumberFormatException e1) {
+					        jLabel14.setVisible(false);
 							JOptionPane.showMessageDialog(null, "Munber format exception", "Error", JOptionPane.ERROR_MESSAGE);
 						}
 				}
@@ -321,6 +353,20 @@ public class MainView extends javax.swing.JFrame implements Observer {
 				}
 			}
 		});
+        
+        crossoverModeCB.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(crossoverModeCB.getSelectedItem().toString().equals("PBX")) {
+					jLabel13.setVisible(true);
+					kTF.setVisible(true);
+				} else {
+					jLabel13.setVisible(false);
+					kTF.setVisible(false);
+				}
+			}
+		});
 
         /*chartP.setBorder(javax.swing.BorderFactory.createTitledBorder("Chart"));
 
@@ -335,26 +381,14 @@ public class MainView extends javax.swing.JFrame implements Observer {
             .addGap(0, 0, Short.MAX_VALUE)
         );*/
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Precision"));
-
-        jLabel10.setText("Precision:");
-
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(precisionTF, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jLabel10)
-                .addComponent(precisionTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         decipheredTA.setEditable(false);
@@ -373,7 +407,9 @@ public class MainView extends javax.swing.JFrame implements Observer {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(resetFieldsB, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(runB, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(runB, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
@@ -437,7 +473,8 @@ public class MainView extends javax.swing.JFrame implements Observer {
                         .addGap(26, 26, 26)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(resetFieldsB)
-                            .addComponent(runB)))
+                            .addComponent(runB)
+                            .addComponent(jLabel14)))
                     .addComponent(jScrollPane1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -494,7 +531,8 @@ public class MainView extends javax.swing.JFrame implements Observer {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -514,15 +552,16 @@ public class MainView extends javax.swing.JFrame implements Observer {
     private javax.swing.JTextField generationNumberTF;
     private javax.swing.JTextField nTF;
     private javax.swing.JTextField truncTF;
+    private javax.swing.JTextField kTF;
     private javax.swing.JTextField crossoverTF;
     private javax.swing.JTextField mutationTF;
     private javax.swing.JTextField eliteTF;
-    private javax.swing.JTextField precisionTF;
     private String fileContent;
     // End of variables declaration//GEN-END:variables
 	
     @Override
 	public void updatePlot(double[] mean, double[] bestGeneration, double[] best, int generations, Chromosome result) {
+        jLabel14.setVisible(false);
         		
     		double[] x = new double[generations];
     		
