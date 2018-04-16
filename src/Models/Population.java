@@ -120,10 +120,6 @@ public class Population {
 		this._population = population;
 	}
 	
-	public Chromosome getBestChromosome() {
-		return _bestChromosome;
-	}
-	
 	public ArrayList<Chromosome> getBestChromosomes() {
 		return _bestChromosomes;
 	}
@@ -159,8 +155,10 @@ public class Population {
 			if(_type.equals("max") ? chromosome.test() > bestAptitude : chromosome.test() < bestAptitude)
 				bestAptitude = chromosome.test();
 			
-			if(_type.equals("max") ? chromosome.test() > _bestChromosome.getAptitude() : chromosome.test() < _bestChromosome.getAptitude())
+			if(_type.equals("max") ? chromosome.test() > _bestChromosome.getAptitude() : chromosome.test() < _bestChromosome.getAptitude()) {
 				_bestChromosome = chromosome.clone();
+				System.out.println(_bestChromosome.getPhenotype());
+			}
 
 			aggregateAptitude += chromosome.getAptitude();
 		}
@@ -296,5 +294,16 @@ public class Population {
 
 	public void resetBest() {
 		_bestChromosomes = new ArrayList<>();
+	}
+	
+	public Chromosome getBestChromosome() {
+		Chromosome ret = new Chromosome();
+		ret.setAptitude(Double.MAX_VALUE);
+		
+		for(Chromosome c: _population)
+			if(c.getAptitude() < ret.getAptitude())
+				ret = c.clone();
+		
+		return ret;
 	}
 }

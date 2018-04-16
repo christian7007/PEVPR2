@@ -54,6 +54,10 @@ public class PBX implements CrossoverAlgorithm {
 		
 		for (int i = 0; i < k; i++){
 			int aux = new Random().nextInt(parent2.getLength());
+			
+			while(freePositions1.contains(aux))
+				aux = new Random().nextInt(parent2.getLength());
+				
 			crossPoints.add(aux);
 			try{
 				freePositions1.remove(freePositions1.indexOf(aux));

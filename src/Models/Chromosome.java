@@ -57,6 +57,9 @@ public class Chromosome {
 		_gens = new char[_length];
 	}
 	
+	public Chromosome() {
+	}
+	
 	/**
 	 * Initialize chromosome with random values.
 	 */
@@ -173,6 +176,7 @@ public class Chromosome {
 		chromosome.setAggregateSocore(_aggregateSocore);
 		chromosome.setAptitude(_aptitude);
 		chromosome.setScore(_score);
+		chromosome.setFileContent(_fileContent);
 		
 		for(int i = 0; i < _length; i++)
 			gens[i] = _gens[i];
@@ -226,5 +230,9 @@ public class Chromosome {
 
 	public void setAggregateSocore(double aggregateSocore) {
 		_aggregateSocore = aggregateSocore;
+	}
+	
+	public void setFileContent(String fileContent) {
+		_fileContent = fileContent;
 	}
 }
