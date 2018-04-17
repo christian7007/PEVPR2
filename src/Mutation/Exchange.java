@@ -16,5 +16,4 @@ public class Exchange implements MutationAlgorithm {
 		chromosome.setGen(p1rand, chromosome.getGen(p2rand));
 		chromosome.setGen(p2rand, aux);
 	}
-
 }

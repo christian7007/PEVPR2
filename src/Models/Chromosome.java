@@ -1,5 +1,6 @@
 package Models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -50,9 +51,9 @@ public class Chromosome {
 	
 	private String _fileContent;
 	
-	public Chromosome(MutationAlgorithm mutation, String fileContent) {
+	public Chromosome(MutationAlgorithm mutation, String fileContent, LetterFrequency letterFrequencies) {
 		_mutation = mutation;
-		_frequencies = new LetterFrequency();
+		_frequencies = letterFrequencies;
 		_fileContent = fileContent;
 		_gens = new char[_length];
 	}
@@ -104,7 +105,7 @@ public class Chromosome {
 	 * @return new chromosome.
 	 */
 	public Chromosome getChild() {
-		return new Chromosome(_mutation, _fileContent);
+		return new Chromosome(_mutation, _fileContent, _frequencies);
 	}
 	
 	/**
@@ -113,35 +114,53 @@ public class Chromosome {
 	 * @return chromosome aptitude.
 	 */
 	public double test() {
-		_frequencies.calculateFrequencies(getPhenotype());
+		String []exchange = exchange().split(" ");
+		double mono = 0.0, bi = 0.0, tri = 0.0;
+		ArrayList<String> blackList = new ArrayList<>();
+		String aux, aux2;
 		
-		double mono = 0.0, bi = 0.0, tri = 0.0, tetra = 0.0;
+		HashMap<String, Double> frequencies1 = _frequencies.getFrequencies1();
+		HashMap<String, Double> frequencies2 = _frequencies.getFrequencies2();
+		HashMap<String, Double> frequencies3 = _frequencies.getFrequencies3();
+		HashMap<String, Double> monoGram = _frequencies.getMonoGram();
+		HashMap<String, Double> biGram = _frequencies.getBiGram();
+		HashMap<String, Double> triGram = _frequencies.getTriGram();
 		
-		HashMap<String, Double> frequencies = _frequencies.getFrequencies();
-		HashMap<String, Integer> monoGram = _frequencies.getMonoGram();
-		HashMap<String, Integer> biGram = _frequencies.getBiGram();
-		HashMap<String, Integer> triGram = _frequencies.getTriGram();
-		HashMap<String, Integer> tetraGram = _frequencies.getTetraGram();
-		
-		for(String key: monoGram.keySet()) {
-			mono += Math.pow((((double)monoGram.get(key) / _fileContent.replaceAll(" ", "").length()) * 100) - frequencies.get(key), 2);
+		for(String word: exchange) {
+			for(int i = 0; i < word.length(); i++) {
+				aux = decode(String.valueOf(word.charAt(i)).toUpperCase());
+				aux2 = String.valueOf(word.charAt(i)).toUpperCase();
+								
+				if(!blackList.contains(aux))
+					mono += Math.abs((double)monoGram.get(aux) * Utils.log(frequencies1.get(aux2), 2));
+			}
 		}
 		
-		for(String key: biGram.keySet()) {
-			bi += Math.pow((((double)biGram.get(key) / _fileContent.replaceAll(" ", "").length()) * 100) - frequencies.get(key), 2);
+		blackList = new ArrayList<>();
+		
+		for(String word: exchange) {
+			for(int i = 0; i < word.length() - 1; i++) {
+				aux = decode(String.valueOf(word.substring(i, i + 2).toUpperCase()).toUpperCase());
+				aux2 = String.valueOf(word.substring(i, i + 2).toUpperCase()).toUpperCase();
+				
+				if(!blackList.contains(aux))
+					bi += Math.abs((double)biGram.get(aux) * Utils.log(frequencies2.get(aux2), 2));
+			}
 		}
 		
-		for(String key: triGram.keySet()) {
-			tri += Math.pow((((double)triGram.get(key) / _fileContent.replaceAll(" ", "").length()) * 100) - frequencies.get(key), 2);
+		blackList = new ArrayList<>();
+		
+		for(String word: exchange) {
+			for(int i = 0; i < word.length() - 2; i++) {
+				aux = decode(String.valueOf(word.substring(i, i + 3).toUpperCase()).toUpperCase());
+				aux2 = String.valueOf(word.substring(i, i + 3).toUpperCase()).toUpperCase();
+				
+				if(!blackList.contains(aux) && frequencies3.containsKey(aux2))
+					tri += Math.abs((double)triGram.get(aux) * Utils.log(Math.abs(frequencies3.get(aux2)), 2));
+			}
 		}
-		
-		for(String key: tetraGram.keySet()) {
-			tetra += Math.pow((((double)tetraGram.get(key) / _fileContent.replaceAll(" ", "").length()) * 100) - frequencies.get(key), 2);
-		}
-		
-		_frequencies.resetFrequencies();
-		
-		return (mono + bi + tri + tetra) / 4;
+				
+		return (mono * 0.3 + bi * 0.3 + tri * 0.4) / 3;
 	}
 	
 	public String exchange() {
@@ -152,6 +171,21 @@ public class Chromosome {
 				ret += _gens[(int) _fileContent.charAt(i) - 65];
 			else
 				ret += _fileContent.charAt(i);
+		}
+		
+		 return ret;
+	}
+	
+	public String decode(String s) {
+		String ret = "";
+		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		
+		for(int i = 0; i < s.length(); i++) {
+			for(int j = 0; j < _gens.length; j++)
+				if(_gens[j] == s.charAt(i)) {
+					ret += alphabet.charAt(j);
+					break;
+				}
 		}
 		
 		 return ret;
@@ -170,7 +204,7 @@ public class Chromosome {
 	 * Clone the chromosome.
 	 */
 	public Chromosome clone() {
-		Chromosome chromosome = new Chromosome(_mutation, _fileContent);
+		Chromosome chromosome = new Chromosome(_mutation, _fileContent, _frequencies);
 		char []gens = new char[_length];
 		
 		chromosome.setAggregateSocore(_aggregateSocore);

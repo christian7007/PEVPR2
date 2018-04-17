@@ -6,7 +6,7 @@ import java.util.Random;
 import Models.Chromosome;
 import Models.Population;
 
-public class Multi implements CrossoverAlgorithm {
+public class PMX implements CrossoverAlgorithm {
 
 	@Override
 	public void crossover(Population population, double crossOver) {

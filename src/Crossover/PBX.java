@@ -55,13 +55,13 @@ public class PBX implements CrossoverAlgorithm {
 		for (int i = 0; i < k; i++){
 			int aux = new Random().nextInt(parent2.getLength());
 			
-			while(freePositions1.contains(aux))
+			while(!freePositions1.contains(aux))
 				aux = new Random().nextInt(parent2.getLength());
 				
 			crossPoints.add(aux);
 			try{
 				freePositions1.remove(freePositions1.indexOf(aux));
-				freePositions2.remove(freePositions1.indexOf(aux));
+				freePositions2.remove(freePositions2.indexOf(aux));
 			}catch(IndexOutOfBoundsException e){
 				
 			}
@@ -90,7 +90,7 @@ public class PBX implements CrossoverAlgorithm {
 				freePositions2.remove(0);
 			}
 		}
-		
+
 		parent1.setGens(child1);
 		parent2.setGens(child2);
 		

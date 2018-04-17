@@ -13,8 +13,8 @@ public class Utils {
 	 * @param base
 	 * @return
 	 */
-	public static int log(double x, int base) {
-	    return (int) (Math.log(x) / Math.log(base));
+	public static double log(double x, int base) {
+	    return (double) (Math.log(x) / Math.log(base));
 	}
 	
 	/**

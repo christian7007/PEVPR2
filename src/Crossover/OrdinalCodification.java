@@ -1,6 +1,7 @@
 package Crossover;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import Models.Chromosome;
 import Models.Population;
@@ -62,28 +63,28 @@ public class OrdinalCodification implements CrossoverAlgorithm{
 			int[] parent1c = codify(parent1);
 			int[] parent2c = codify(parent2);
 			
-			cross(parent1c, parent2c);
-			
-			parent1.setGens(decode(parent1c));
-			parent2.setGens(decode(parent2c));
+			cross(parent1c, parent2c, parent1, parent2);
 			
 			parent1.setAptitude(parent1.test());
 			parent2.setAptitude(parent2.test());
 		}
 	}
 	
-	private void cross(int[] parent1, int[] parent2){
-		double prob;
-		int aux;
+	private void cross(int[] parent1c, int[] parent2c, Chromosome parent1, Chromosome parent2) {
+		int rnd = new Random().nextInt(parent1c.length);
+		int [] aux1 = new int[parent1c.length], aux2 = new int[parent2c.length];
 		
-		for(int i = 0; i < parent1.length; i++) {
-			prob = Math.random();
-			
-			if(prob < 0.5) {
-				aux = parent2[i];
-				parent2[i] = parent1[i];
-				parent1[i] = aux;
-			}
+		for(int i = 0; i < rnd; i++) {
+			aux1[i] = parent2c[i];
+			aux2[i] = parent1c[i];
 		}
+		
+		for(int i = rnd; i < parent1c.length; i++) {
+			aux1[i] = parent1c[i];
+			aux2[i] = parent2c[i];
+		}
+		
+		parent1.setGens(decode(parent1c));
+		parent2.setGens(decode(parent2c));
 	}
 }
