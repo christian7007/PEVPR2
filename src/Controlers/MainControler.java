@@ -65,7 +65,7 @@ public class MainControler {
 			chromosomes[i] = new Chromosome(MutationFactory.getMutationAlgorithm(mutationAlgorithm, kn), fileContent, letterFrequency);
 		
 		Population population = new Population(populationSize, generationNumber, elitism, chromosomes, "min");
-		SelectionAlgorithm selectionAlgorithm = SelectionFactory.getSelectionAlgorithm(selection, truncation);
+		SelectionAlgorithm selectionAlgorithm = SelectionFactory.getSelectionAlgorithm(selection, truncation, kn);
 		CrossoverAlgorithm crossoverAlgorithm = CrossOverFactory.getCrossoverAlgorithm(crossAlgorithm, kn);
 		
 		population.init();

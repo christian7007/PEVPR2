@@ -126,15 +126,17 @@ public class Chromosome {
 		HashMap<String, Double> biGram = _frequencies.getBiGram();
 		HashMap<String, Double> triGram = _frequencies.getTriGram();
 		
-		for(String word: exchange) {
+		/*for(String word: exchange) {
 			for(int i = 0; i < word.length(); i++) {
 				aux = decode(String.valueOf(word.charAt(i)).toUpperCase());
 				aux2 = String.valueOf(word.charAt(i)).toUpperCase();
 								
-				if(!blackList.contains(aux))
+				if(!blackList.contains(aux)) {
 					mono += Math.abs((double)monoGram.get(aux) * Utils.log(frequencies1.get(aux2), 2));
+					blackList.add(aux);
+				}
 			}
-		}
+		}*/
 		
 		blackList = new ArrayList<>();
 		
@@ -143,8 +145,11 @@ public class Chromosome {
 				aux = decode(String.valueOf(word.substring(i, i + 2).toUpperCase()).toUpperCase());
 				aux2 = String.valueOf(word.substring(i, i + 2).toUpperCase()).toUpperCase();
 				
-				if(!blackList.contains(aux))
+				if(!blackList.contains(aux)) {
+					//bi += Math.pow((double)biGram.get(aux) - frequencies2.get(aux2), 2);
 					bi += Math.abs((double)biGram.get(aux) * Utils.log(frequencies2.get(aux2), 2));
+					blackList.add(aux);
+				}
 			}
 		}
 		
@@ -155,12 +160,15 @@ public class Chromosome {
 				aux = decode(String.valueOf(word.substring(i, i + 3).toUpperCase()).toUpperCase());
 				aux2 = String.valueOf(word.substring(i, i + 3).toUpperCase()).toUpperCase();
 				
-				if(!blackList.contains(aux) && frequencies3.containsKey(aux2))
+				if(!blackList.contains(aux) && frequencies3.containsKey(aux2) && triGram.containsKey(aux)) {
+					//tri += Math.pow((double)triGram.get(aux) - frequencies3.get(aux2), 2);
 					tri += Math.abs((double)triGram.get(aux) * Utils.log(Math.abs(frequencies3.get(aux2)), 2));
+					blackList.add(aux);
+				}
 			}
 		}
 				
-		return (mono * 0.3 + bi * 0.3 + tri * 0.4) / 3;
+		return (bi * 0.3 + tri * 0.7) / 2;
 	}
 	
 	public String exchange() {

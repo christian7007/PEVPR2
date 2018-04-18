@@ -298,11 +298,16 @@ public class Population {
 	
 	public Chromosome getBestChromosome() {
 		Chromosome ret = new Chromosome();
-		ret.setAptitude(Double.MAX_VALUE);
+		double best = Double.MAX_VALUE;
+		double test;
 		
-		for(Chromosome c: _population)
-			if(c.getAptitude() < ret.getAptitude())
+		for(Chromosome c: _population) {
+			test = c.test();
+			if(test < best) {
 				ret = c.clone();
+				best = test;
+			}
+		}
 		
 		return ret;
 	}

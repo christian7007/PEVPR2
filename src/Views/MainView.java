@@ -62,7 +62,6 @@ public class MainView extends javax.swing.JFrame implements Observer {
 		jLabel11 = new javax.swing.JLabel();
 		jLabel12 = new javax.swing.JLabel();
 		jLabel13 = new javax.swing.JLabel();
-		jLabel14 = new javax.swing.JLabel();
 		jLabel2 = new javax.swing.JLabel();
 		generationNumberTF = new javax.swing.JTextField();
 		nTF = new javax.swing.JTextField();
@@ -103,8 +102,6 @@ public class MainView extends javax.swing.JFrame implements Observer {
 
 		// define the legend position
 		chartP.addLegend("SOUTH");
-		jLabel14.setText("Processing....");
-		jLabel14.setVisible(false);
 
 		openFileChooser.addActionListener(new ActionListener() {
 
@@ -312,7 +309,6 @@ public class MainView extends javax.swing.JFrame implements Observer {
 					JOptionPane.showMessageDialog(null, "You must introduce all the paramaters", "Error",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
-					jLabel14.setVisible(true);
 					try {
 						controller.run(Integer.parseInt(populationSizeTF.getText()),
 								Integer.parseInt(generationNumberTF.getText()),
@@ -327,7 +323,6 @@ public class MainView extends javax.swing.JFrame implements Observer {
 								mutationModeCB.getSelectedItem().toString(), Double.parseDouble(mutationTF.getText()),
 								Double.parseDouble(eliteTF.getText()), fileContent.toUpperCase(), frequencies);
 					} catch (NumberFormatException e1) {
-						jLabel14.setVisible(false);
 						JOptionPane.showMessageDialog(null, "Munber format exception", "Error",
 								JOptionPane.ERROR_MESSAGE);
 					}
@@ -341,7 +336,9 @@ public class MainView extends javax.swing.JFrame implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (selectionModeCB.getSelectedItem().toString().equals("Truncation")) {
+				if (selectionModeCB.getSelectedItem().toString().equals("Truncation") ||
+						selectionModeCB.getSelectedItem().toString().equals("Tournament") ||
+						selectionModeCB.getSelectedItem().toString().equals("Rests")) {
 					jLabel12.setVisible(true);
 					truncTF.setVisible(true);
 				} else {
@@ -416,9 +413,6 @@ public class MainView extends javax.swing.JFrame implements Observer {
 												javax.swing.GroupLayout.PREFERRED_SIZE)
 										.addGap(18, 18, 18)
 										.addComponent(runB, javax.swing.GroupLayout.PREFERRED_SIZE, 130,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addGap(18, 18, 18).addComponent(jLabel14,
-												javax.swing.GroupLayout.PREFERRED_SIZE, 130,
 												javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -504,7 +498,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
 												javax.swing.GroupLayout.PREFERRED_SIZE)
 										.addGap(26, 26, 26)
 										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(resetFieldsB).addComponent(runB).addComponent(jLabel14)))
+												.addComponent(resetFieldsB).addComponent(runB)))
 								.addComponent(jScrollPane1))
 						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
@@ -565,7 +559,6 @@ public class MainView extends javax.swing.JFrame implements Observer {
 	private javax.swing.JLabel jLabel11;
 	private javax.swing.JLabel jLabel12;
 	private javax.swing.JLabel jLabel13;
-	private javax.swing.JLabel jLabel14;
 	private javax.swing.JLabel jLabel2;
 	private javax.swing.JLabel jLabel3;
 	private javax.swing.JLabel jLabel4;
@@ -595,8 +588,6 @@ public class MainView extends javax.swing.JFrame implements Observer {
 
 	@Override
 	public void updatePlot(double[] mean, double[] bestGeneration, double[] best, int generations, Chromosome result) {
-		jLabel14.setVisible(false);
-
 		double[] x = new double[generations];
 
 		for (int i = 0; i < generations; i++)
