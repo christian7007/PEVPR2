@@ -100,6 +100,10 @@ public class Population {
 		return _population[pos];
 	}
 	
+	public Chromosome getRandomSingle() {
+		return _population[new Random().nextInt(_popultionSize - 1)];
+	}
+	
 	public void setSingle(Chromosome single, int pos) {
 		this._population[pos] = single;
 	}
@@ -154,11 +158,6 @@ public class Population {
 				chromosome.setAptitude((Math.abs(maxMin) + 1.0) - chromosome.test());
 			if(_type.equals("max") ? chromosome.test() > bestAptitude : chromosome.test() < bestAptitude)
 				bestAptitude = chromosome.test();
-			
-			if(_type.equals("max") ? chromosome.test() > _bestChromosome.getAptitude() : chromosome.test() < _bestChromosome.getAptitude()) {
-				_bestChromosome = chromosome.clone();
-				System.out.println(_bestChromosome.getPhenotype());
-			}
 
 			aggregateAptitude += chromosome.getAptitude();
 		}

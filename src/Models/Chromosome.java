@@ -168,7 +168,7 @@ public class Chromosome {
 			}
 		}
 				
-		return (bi * 0.3 + tri * 0.7) / 2;
+		return ((mono * 0.0) + (bi * 0.2) + (tri * 0.7)) / 2;
 	}
 	
 	public String exchange() {

@@ -56,17 +56,17 @@ public class MainControler {
 	 * @param n iterations number for problem 5.
 	 * @param truncation percentage of truncation selection.
 	 */
-	public void run(int populationSize, int generationNumber, String selection, double truncation, String crossAlgorithm, double cross, int kn,
-					String mutationAlgorithm, double mutation, double elitism, String fileContent, LetterFrequency letterFrequency) {
+	public void run(int populationSize, int generationNumber, String selection, double truncation, int tournamentN, String crossAlgorithm, double cross, int k,
+					String mutationAlgorithm, double mutation, int heuristic, double elitism, String fileContent, LetterFrequency letterFrequency) {
 		
 		Chromosome []chromosomes = new Chromosome[populationSize];
 		
 		for(int i = 0; i < populationSize; i++)
-			chromosomes[i] = new Chromosome(MutationFactory.getMutationAlgorithm(mutationAlgorithm, kn), fileContent, letterFrequency);
+			chromosomes[i] = new Chromosome(MutationFactory.getMutationAlgorithm(mutationAlgorithm, heuristic), fileContent, letterFrequency);
 		
 		Population population = new Population(populationSize, generationNumber, elitism, chromosomes, "min");
-		SelectionAlgorithm selectionAlgorithm = SelectionFactory.getSelectionAlgorithm(selection, truncation, kn);
-		CrossoverAlgorithm crossoverAlgorithm = CrossOverFactory.getCrossoverAlgorithm(crossAlgorithm, kn);
+		SelectionAlgorithm selectionAlgorithm = SelectionFactory.getSelectionAlgorithm(selection, truncation, tournamentN);
+		CrossoverAlgorithm crossoverAlgorithm = CrossOverFactory.getCrossoverAlgorithm(crossAlgorithm, k);
 		
 		population.init();
 		_ga.setGenerationNumber(generationNumber);

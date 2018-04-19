@@ -54,7 +54,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
 	private void initComponents() {
 
 		this.setTitle("Practise 2");
-		this.setPreferredSize(new Dimension(1200, 580));
+		this.setPreferredSize(new Dimension(1200, 880));
 		this.setResizable(false);
 
 		jLabel1 = new javax.swing.JLabel();
@@ -62,12 +62,16 @@ public class MainView extends javax.swing.JFrame implements Observer {
 		jLabel11 = new javax.swing.JLabel();
 		jLabel12 = new javax.swing.JLabel();
 		jLabel13 = new javax.swing.JLabel();
+		jLabel14 = new javax.swing.JLabel();
 		jLabel2 = new javax.swing.JLabel();
 		generationNumberTF = new javax.swing.JTextField();
 		nTF = new javax.swing.JTextField();
 		truncTF = new javax.swing.JTextField();
+		tournamentTF = new javax.swing.JTextField();
 		kTF = new javax.swing.JTextField();
+		heuristicTF = new javax.swing.JTextField();
 		jLabel3 = new javax.swing.JLabel();
+		jLabel15 = new javax.swing.JLabel();
 		selectionModeCB = new javax.swing.JComboBox<>();
 		jPanel1 = new javax.swing.JPanel();
 		jLabel4 = new javax.swing.JLabel();
@@ -94,11 +98,15 @@ public class MainView extends javax.swing.JFrame implements Observer {
 		openFileChooser.setBackground(Color.red);
 
 		// DEFAULTS VALUES
-		populationSizeTF.setText("50");
+		populationSizeTF.setText("100");
 		generationNumberTF.setText("100");
 		crossoverTF.setText("0.65");
 		mutationTF.setText("0.2");
 		eliteTF.setText("0.15");
+		kTF.setText("0");
+		heuristicTF.setText("0");
+		truncTF.setText("0");
+		tournamentTF.setText("0");
 
 		// define the legend position
 		chartP.addLegend("SOUTH");
@@ -171,10 +179,18 @@ public class MainView extends javax.swing.JFrame implements Observer {
 		jLabel12.setText("Trunc: ");
 		jLabel12.setVisible(false);
 		truncTF.setVisible(false);
+		
+		jLabel14.setText("N: ");
+		jLabel14.setVisible(false);
+		tournamentTF.setVisible(false);
 
-		jLabel13.setText("K/N: ");
+		jLabel13.setText("K: ");
 		jLabel13.setVisible(false);
 		kTF.setVisible(false);
+		
+		jLabel15.setText("N: ");
+		jLabel15.setVisible(false);
+		heuristicTF.setVisible(false);
 
 		jLabel2.setText("Generation number:");
 
@@ -236,11 +252,11 @@ public class MainView extends javax.swing.JFrame implements Observer {
 		jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(jPanel2Layout.createSequentialGroup().addContainerGap()
 						.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(jLabel6).addComponent(jLabel7))
+								.addComponent(jLabel6).addComponent(jLabel7).addComponent(jLabel15))
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
 								javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-								.addComponent(mutationModeCB, 0, 120, Short.MAX_VALUE).addComponent(mutationTF))
+								.addComponent(mutationModeCB, 0, 120, Short.MAX_VALUE).addComponent(mutationTF).addComponent(heuristicTF))
 						.addContainerGap()));
 		jPanel2Layout
 				.setVerticalGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -251,6 +267,12 @@ public class MainView extends javax.swing.JFrame implements Observer {
 								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 								.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 										.addComponent(jLabel7).addComponent(mutationTF,
+												javax.swing.GroupLayout.PREFERRED_SIZE,
+												javax.swing.GroupLayout.DEFAULT_SIZE,
+												javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+								.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+										.addComponent(jLabel15).addComponent(heuristicTF,
 												javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -313,14 +335,12 @@ public class MainView extends javax.swing.JFrame implements Observer {
 						controller.run(Integer.parseInt(populationSizeTF.getText()),
 								Integer.parseInt(generationNumberTF.getText()),
 								selectionModeCB.getSelectedItem().toString(),
-								selectionModeCB.getSelectedItem().toString().equals("Truncation")
-										? Double.parseDouble(truncTF.getText().toString())
-										: 0.0,
+								Double.parseDouble(truncTF.getText().toString()),
+								Integer.parseInt(tournamentTF.getText().toString()),
 								crossoverModeCB.getSelectedItem().toString(), Double.parseDouble(crossoverTF.getText()),
-								crossoverModeCB.getSelectedItem().toString().equals("PBX")
-										? Integer.parseInt(kTF.getText())
-										: 0,
+								Integer.parseInt(kTF.getText()),
 								mutationModeCB.getSelectedItem().toString(), Double.parseDouble(mutationTF.getText()),
+								Integer.parseInt(heuristicTF.getText()),
 								Double.parseDouble(eliteTF.getText()), fileContent.toUpperCase(), frequencies);
 					} catch (NumberFormatException e1) {
 						JOptionPane.showMessageDialog(null, "Munber format exception", "Error",
@@ -336,14 +356,22 @@ public class MainView extends javax.swing.JFrame implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (selectionModeCB.getSelectedItem().toString().equals("Truncation") ||
-						selectionModeCB.getSelectedItem().toString().equals("Tournament") ||
-						selectionModeCB.getSelectedItem().toString().equals("Rests")) {
+				if (selectionModeCB.getSelectedItem().toString().equals("Truncation")) {
 					jLabel12.setVisible(true);
 					truncTF.setVisible(true);
+					jLabel14.setVisible(false);
+					tournamentTF.setVisible(false);
+				} else if (selectionModeCB.getSelectedItem().toString().equals("Tournament") || 
+						selectionModeCB.getSelectedItem().toString().equals("Rests")) {
+					jLabel12.setVisible(false);
+					truncTF.setVisible(false);
+					jLabel14.setVisible(true);
+					tournamentTF.setVisible(true);
 				} else {
 					jLabel12.setVisible(false);
 					truncTF.setVisible(false);
+					jLabel14.setVisible(false);
+					tournamentTF.setVisible(false);
 				}
 			}
 		});
@@ -366,12 +394,12 @@ public class MainView extends javax.swing.JFrame implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (crossoverModeCB.getSelectedItem().toString().equals("Heuristic")) {
-					jLabel13.setVisible(true);
-					kTF.setVisible(true);
+				if (mutationModeCB.getSelectedItem().toString().equals("Heuristic")) {
+					jLabel15.setVisible(true);
+					heuristicTF.setVisible(true);
 				} else {
-					jLabel13.setVisible(false);
-					kTF.setVisible(false);
+					jLabel15.setVisible(false);
+					heuristicTF.setVisible(false);
 				}
 			}
 		});
@@ -423,7 +451,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
 								.addGroup(layout.createSequentialGroup().addGap(8, 8, 8)
 										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 												.addComponent(jLabel2).addComponent(jLabel3).addComponent(jLabel1)
-												.addComponent(jLabel11).addComponent(jLabel12).addComponent(jLabel9))
+												.addComponent(jLabel11).addComponent(jLabel12).addComponent(jLabel9).addComponent(jLabel14))
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 										.addGroup(layout
 												.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -431,7 +459,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
 												.addComponent(populationSizeTF)
 												.addComponent(selectionModeCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE,
 														Short.MAX_VALUE)
-												.addComponent(nTF).addComponent(truncTF).addComponent(openFileChooser,
+												.addComponent(nTF).addComponent(truncTF).addComponent(tournamentTF).addComponent(openFileChooser,
 														javax.swing.GroupLayout.Alignment.LEADING,
 														javax.swing.GroupLayout.PREFERRED_SIZE, 104,
 														javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -477,6 +505,11 @@ public class MainView extends javax.swing.JFrame implements Observer {
 										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 												.addComponent(jLabel12)
 												.addComponent(truncTF, javax.swing.GroupLayout.PREFERRED_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.PREFERRED_SIZE))
+										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(jLabel14)
+												.addComponent(tournamentTF, javax.swing.GroupLayout.PREFERRED_SIZE,
 														javax.swing.GroupLayout.DEFAULT_SIZE,
 														javax.swing.GroupLayout.PREFERRED_SIZE))
 										.addGap(18, 18, 18)
@@ -559,6 +592,8 @@ public class MainView extends javax.swing.JFrame implements Observer {
 	private javax.swing.JLabel jLabel11;
 	private javax.swing.JLabel jLabel12;
 	private javax.swing.JLabel jLabel13;
+	private javax.swing.JLabel jLabel14;
+	private javax.swing.JLabel jLabel15;
 	private javax.swing.JLabel jLabel2;
 	private javax.swing.JLabel jLabel3;
 	private javax.swing.JLabel jLabel4;
@@ -578,7 +613,9 @@ public class MainView extends javax.swing.JFrame implements Observer {
 	private javax.swing.JTextField generationNumberTF;
 	private javax.swing.JTextField nTF;
 	private javax.swing.JTextField truncTF;
+	private javax.swing.JTextField tournamentTF;
 	private javax.swing.JTextField kTF;
+	private javax.swing.JTextField heuristicTF;
 	private javax.swing.JTextField crossoverTF;
 	private javax.swing.JTextField mutationTF;
 	private javax.swing.JTextField eliteTF;
@@ -589,13 +626,23 @@ public class MainView extends javax.swing.JFrame implements Observer {
 	@Override
 	public void updatePlot(double[] mean, double[] bestGeneration, double[] best, int generations, Chromosome result) {
 		double[] x = new double[generations];
+		StringBuilder ret = new StringBuilder();
+		String phenotype = result.getPhenotype();
+		
+		for(int i = 0; i < phenotype.length(); i++) {
+			ret.append(phenotype.charAt(i));
+			
+			if(i % 110 == 0 && i != 0)
+				ret.append("\n");
+		}
+		
 
 		for (int i = 0; i < generations; i++)
 			x[i] = i + 1;
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				decipheredTA.setText(result.getPhenotype());
+				decipheredTA.setText(ret.toString());
 				chartP.removeAllPlots();
 				chartP.addLinePlot("Absolute best", x, best);
 				chartP.addLinePlot("Generation best", x, bestGeneration);

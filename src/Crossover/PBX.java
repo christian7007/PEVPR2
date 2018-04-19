@@ -8,10 +8,10 @@ import Models.Population;
 
 public class PBX implements CrossoverAlgorithm {
 	
-	private int k;
+	private int _k;
 	
 	public PBX(int k){
-		this.k = k;
+		_k = k;
 	}
 	
 	
@@ -52,7 +52,7 @@ public class PBX implements CrossoverAlgorithm {
 			freePositions2.add(i);
 		}
 		
-		for (int i = 0; i < k; i++){
+		for (int i = 0; i < _k; i++){
 			int aux = new Random().nextInt(parent2.getLength());
 			
 			while(!freePositions1.contains(aux))
@@ -70,7 +70,7 @@ public class PBX implements CrossoverAlgorithm {
 		char[] child1 = new char[parent1.getLength()];
 		char[] child2 = new char[parent1.getLength()];
 		
-		for (int i = 0; i < k; i++){
+		for (int i = 0; i < _k; i++){
 			child1[crossPoints.get(i)] = parent1.getGen(crossPoints.get(i));
 			kvalues1.add(parent1.getGen(crossPoints.get(i)));
 			child2[crossPoints.get(i)] = parent2.getGen(crossPoints.get(i));
