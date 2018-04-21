@@ -95,18 +95,19 @@ public class MainView extends javax.swing.JFrame implements Observer {
 		jScrollPane1 = new javax.swing.JScrollPane();
 		decipheredTA = new javax.swing.JTextArea();
 		fileContent = "";
+		fileContentWithSymbols = "";
 		openFileChooser.setBackground(Color.red);
 
 		// DEFAULTS VALUES
 		populationSizeTF.setText("100");
-		generationNumberTF.setText("100");
-		crossoverTF.setText("0.65");
+		generationNumberTF.setText("220");
+		crossoverTF.setText("0.75");
 		mutationTF.setText("0.2");
-		eliteTF.setText("0.15");
-		kTF.setText("0");
+		eliteTF.setText("0.75");
+		kTF.setText("4");
 		heuristicTF.setText("0");
 		truncTF.setText("0");
-		tournamentTF.setText("0");
+		tournamentTF.setText("5");
 
 		// define the legend position
 		chartP.addLegend("SOUTH");
@@ -133,6 +134,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
 
 					while ((sCurrentLine = br.readLine()) != null) {
 						fileContent += sCurrentLine + " ";
+						fileContentWithSymbols += sCurrentLine + " ";
 					}
 
 					fileContent = fileContent.replaceAll("\\.", "");
@@ -181,12 +183,12 @@ public class MainView extends javax.swing.JFrame implements Observer {
 		truncTF.setVisible(false);
 		
 		jLabel14.setText("N: ");
-		jLabel14.setVisible(false);
-		tournamentTF.setVisible(false);
+		jLabel14.setVisible(true);
+		tournamentTF.setVisible(true);
 
 		jLabel13.setText("K: ");
-		jLabel13.setVisible(false);
-		kTF.setVisible(false);
+		jLabel13.setVisible(true);
+		kTF.setVisible(true);
 		
 		jLabel15.setText("N: ");
 		jLabel15.setVisible(false);
@@ -197,7 +199,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
 		jLabel3.setText("Selection:");
 
 		selectionModeCB.setModel(new javax.swing.DefaultComboBoxModel<>(
-				new String[] { "Roulette", "Tournament", "Universal stochastic", "Truncation", "Rests" }));
+				new String[] { "Rests", "Roulette", "Tournament", "Universal stochastic", "Truncation" }));
 
 		jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Crossover"));
 		jPanel1.setToolTipText("");
@@ -205,7 +207,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
 		jLabel4.setText("CrossoverB:");
 
 		crossoverModeCB.setModel(new javax.swing.DefaultComboBoxModel<>(
-				new String[] { "Ordinal", "PBX", "Point crossover", "PMX", "Uniform crossover" }));
+				new String[] { "PBX", "Ordinal", "PMX" }));
 
 		jLabel5.setText("Crossover %:");
 
@@ -245,7 +247,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
 		jLabel7.setText("Mutation %:");
 
 		mutationModeCB.setModel(new javax.swing.DefaultComboBoxModel<>(
-				new String[] { "Inserction", "Exchange", "Inversion", "Heuristic" }));
+				new String[] { "Exchange", "Inserction", "Exchange 2", "Inversion", "Heuristic" }));
 
 		javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
 		jPanel2.setLayout(jPanel2Layout);
@@ -620,19 +622,21 @@ public class MainView extends javax.swing.JFrame implements Observer {
 	private javax.swing.JTextField mutationTF;
 	private javax.swing.JTextField eliteTF;
 	private String fileContent;
+	private String fileContentWithSymbols;
 	private LetterFrequency frequencies;
 	// End of variables declaration//GEN-END:variables
 
 	@Override
 	public void updatePlot(double[] mean, double[] bestGeneration, double[] best, int generations, Chromosome result) {
 		double[] x = new double[generations];
+		result.setFileContent(fileContentWithSymbols);
 		StringBuilder ret = new StringBuilder();
 		String phenotype = result.getPhenotype();
 		
 		for(int i = 0; i < phenotype.length(); i++) {
 			ret.append(phenotype.charAt(i));
 			
-			if(i % 110 == 0 && i != 0)
+			if(i % 112 == 0 && i != 0)
 				ret.append("\n");
 		}
 		

@@ -168,14 +168,14 @@ public class Chromosome {
 			}
 		}
 				
-		return ((mono * 0.0) + (bi * 0.2) + (tri * 0.7)) / 2;
+		return ((bi * 0.3) + (tri * 0.7)) / 2;
 	}
 	
 	public String exchange() {
 		String ret = "";
 		
 		for(int i = 0; i < _fileContent.length(); i++) {
-			if(_fileContent.charAt(i) != ' ')
+			if(" .,\'\"();-?".indexOf(_fileContent.charAt(i)) < 0)
 				ret += _gens[(int) _fileContent.charAt(i) - 65];
 			else
 				ret += _fileContent.charAt(i);
