@@ -314,11 +314,15 @@ public class MainView extends javax.swing.JFrame implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// DEFAULTS VALUES
-				populationSizeTF.setText("50");
-				generationNumberTF.setText("100");
-				crossoverTF.setText("0.65");
+				populationSizeTF.setText("100");
+				generationNumberTF.setText("220");
+				crossoverTF.setText("0.75");
 				mutationTF.setText("0.2");
-				eliteTF.setText("0.15");
+				eliteTF.setText("0.75");
+				kTF.setText("4");
+				heuristicTF.setText("0");
+				truncTF.setText("0");
+				tournamentTF.setText("5");
 			}
 		});
 
