@@ -636,6 +636,12 @@ public class MainView extends javax.swing.JFrame implements Observer {
 		result.setFileContent(fileContentWithSymbols);
 		StringBuilder ret = new StringBuilder();
 		String phenotype = result.getPhenotype();
+		String key = "";
+		
+		for(char c: result.getGens())
+			key += c;
+		
+		System.out.println("KEY: " + key);
 		
 		for(int i = 0; i < phenotype.length(); i++) {
 			ret.append(phenotype.charAt(i));

@@ -66,7 +66,6 @@ public class GeneticAlgorithm {
 				_population.replaceElite();
 			
 			_population.test();
-			System.out.println(i);
 		}
 		
 		_population.resetBest();
