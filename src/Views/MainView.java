@@ -207,7 +207,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
 		jLabel4.setText("CrossoverB:");
 
 		crossoverModeCB.setModel(new javax.swing.DefaultComboBoxModel<>(
-				new String[] { "PBX", "Ordinal", "PMX" }));
+				new String[] { "PBX", "Ordinal", "PMX", "Ordinal inverse" }));
 
 		jLabel5.setText("Crossover %:");
 
