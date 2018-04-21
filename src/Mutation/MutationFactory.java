@@ -11,6 +11,8 @@ public class MutationFactory {
 			return new Inversion();
 		else if (algorithm.equals("Heuristic"))
 			return new Heuristic(n);
+		else if (algorithm.equals("Exchange 2"))
+			return new Exchange2();
 		else
 			return new Inserction();
 	}
