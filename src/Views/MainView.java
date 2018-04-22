@@ -16,6 +16,7 @@ import java.io.IOException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 import org.math.plot.Plot2DPanel;
@@ -117,11 +118,12 @@ public class MainView extends javax.swing.JFrame implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				openFileChooser.setBackground(Color.green);
+				
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.showOpenDialog(openFileChooser);
 				File file = fileChooser.getSelectedFile();
 				fileContent = "";
-
+				fileContentWithSymbols = "";
 				BufferedReader br = null;
 				FileReader fr = null;
 
@@ -133,8 +135,8 @@ public class MainView extends javax.swing.JFrame implements Observer {
 					String sCurrentLine;
 
 					while ((sCurrentLine = br.readLine()) != null) {
-						fileContent += sCurrentLine + " ";
-						fileContentWithSymbols += sCurrentLine + " ";
+						fileContent += sCurrentLine.toUpperCase() + " ";
+						fileContentWithSymbols += sCurrentLine.toUpperCase() + " ";
 					}
 
 					fileContent = fileContent.replaceAll("\\.", "");
@@ -656,6 +658,7 @@ public class MainView extends javax.swing.JFrame implements Observer {
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+				decipheredTA.setText(null);
 				decipheredTA.setText(ret.toString());
 				chartP.removeAllPlots();
 				chartP.addLinePlot("Absolute best", x, best);
